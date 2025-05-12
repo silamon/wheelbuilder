@@ -40,5 +40,5 @@ jobs:
         ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
       run: |
         for whl in dist/*.whl; do
-          anaconda upload "$whl"
+          anaconda upload --no-progress "$whl"
         done
