@@ -40,5 +40,5 @@ jobs:
         ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
       run: |
         for whl in dist/*.whl; do
-          anaconda upload "$whl" --user home-assistant-deps --label main --skip-existing
+          anaconda upload "$whl" --label main --skip-existing
         done
