@@ -31,6 +31,12 @@ jobs:
         mkdir dist
         pip wheel --wheel-dir=dist -r requirements.txt
 
+    - name: Upload wheels as GitHub artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: built-wheels
+        path: dist/*.whl
+
     - name: Install Anaconda CLI
       run: |
         pip install anaconda-client
