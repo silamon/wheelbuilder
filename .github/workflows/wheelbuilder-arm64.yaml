@@ -1,0 +1,48 @@
+name: Build and Upload Wheels to Anaconda
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-upload:
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.13'
+
+    - name: Upgrade pip and install wheel
+      run: |
+        python -m pip install --upgrade pip wheel
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Build wheels
+      run: |
+        mkdir dist
+        pip wheel --wheel-dir=dist -r requirements.txt
+
+    - name: Install Anaconda CLI
+      run: |
+        pip install anaconda-client
+
+    - name: Login to Anaconda
+      env:
+        ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
+      run: |
+        anaconda login --token $ANACONDA_TOKEN
+
+    - name: Upload wheels to Anaconda
+      run: |
+        for whl in dist/*.whl; do
+          anaconda upload "$whl" --user home-assistant-deps
+        done
