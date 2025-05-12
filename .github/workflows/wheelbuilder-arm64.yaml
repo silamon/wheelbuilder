@@ -35,14 +35,10 @@ jobs:
       run: |
         pip install anaconda-client
 
-    - name: Login to Anaconda
-      env:
-        ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
-      run: |
-        anaconda login --token $ANACONDA_TOKEN
-
     - name: Upload wheels to Anaconda
+      env:
+        ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
       run: |
         for whl in dist/*.whl; do
-          anaconda upload "$whl" --user home-assistant-deps
+          anaconda upload "$whl" --user home-assistant-deps --label main --skip-existing
         done
