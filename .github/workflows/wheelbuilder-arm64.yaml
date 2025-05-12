@@ -29,7 +29,7 @@ jobs:
     - name: Build wheels
       run: |
         mkdir dist
-        pip wheel --wheel-dir=dist -r requirements.txt
+        pip wheel --wheel-dir=dist -r requirements_all.txt
 
     - name: Upload wheels as GitHub artifact
       uses: actions/upload-artifact@v4
@@ -46,7 +46,7 @@ jobs:
         ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
       run: |
          for whl in dist/*.whl; do
-           if ! anaconda upload --no-progress "$whl"; then
+           if ! anaconda upload --skip-existing --no-progress "$whl"; then
              echo "::warning file=$whl::Anaconda upload failed for $whl"
            fi
          done
