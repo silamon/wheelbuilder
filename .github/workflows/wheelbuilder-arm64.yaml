@@ -46,7 +46,7 @@ jobs:
         ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
       run: |
          for whl in dist/*.whl; do
-           if ! anaconda upload --skip-existing --no-progress "$whl"; then
+           if ! anaconda upload --skip-existing --no-progress --summary=" " --description=" " "$whl"; then
              echo "::warning file=$whl::Anaconda upload failed for $whl"
            fi
          done
